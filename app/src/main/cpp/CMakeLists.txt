@@ -32,13 +32,18 @@ find_library( # Sets the name of the path variable.
               # you want CMake to locate.
               log )
 
+# https://developer.android.com/studio/projects/configure-cmake
+add_library( imported-lib SHARED IMPORTED )
+
+set_target_properties( imported-lib PROPERTIES IMPORTED_LOCATION
+              /home/peter/Documents/quell/examples/android-studio-native/app/libs/libmyniexample.so )
+
+# include_directories( /home/peter/Documents/quell/examples/android-studio-native/app/libs/include )
+
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
 
-target_link_libraries( # Specifies the target library.
-                       native-lib
-
-                       # Links the target library to the log library
-                       # included in the NDK.
+target_link_libraries( native-lib
+                       imported-lib
                        ${log-lib} )
