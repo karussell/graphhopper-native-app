@@ -1,4 +1,4 @@
-# Native GraphHopper
+# Native GraphHopper App
 
 Calculate offline routes and distances with GraphHopper on the Android
 device using a native image of GraphHopper instead of the jar dependency.
