@@ -25,15 +25,9 @@ find_library( log-lib log )
 # https://github.com/android/ndk-samples/issues/669
 
 # TODO this does not work because the library has absolute paths inside? See similar issue https://github.com/android/ndk-samples/issues/669
-# the library has to be at "<repo_root>/distribution/ghlib/arm64-v8a/libmyniexample.so
-
 # add_library( myghlib SHARED IMPORTED )
-# set_target_properties( myghlib PROPERTIES IMPORTED_LOCATION ${distribution_DIR}/ghlib/${ANDROID_ABI}/libmyniexample.so )
-
-# Specifies libraries CMake should link to your target library. You
-# can link multiple libraries, such as libraries you define in this
-# build script, prebuilt third-party libraries, or system libraries.
+# set_target_properties( myghlib PROPERTIES IMPORTED_LOCATION ${distribution_DIR}/ghlib/${ANDROID_ABI}/libgraphhoppernative.so )
 
 target_link_libraries( native-lib
                        ${log-lib}
-                       -lmyniexample -L${distribution_DIR}/ghlib/${ANDROID_ABI}/ )
+                       -lgraphhoppernative -L${distribution_DIR}/ghlib/${ANDROID_ABI}/ )

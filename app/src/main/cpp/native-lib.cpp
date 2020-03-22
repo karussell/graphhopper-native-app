@@ -73,9 +73,10 @@ extern "C" JNIEXPORT jdouble JNICALL Java_com_graphhopper_myapplication_MainActi
     // https://stackoverflow.com/q/17840521/194609
     // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "48.118463", "11.539282", "52.5147", "13.3883"};
 
-    for(int i = 0; i < 10; i++) {
+    // TODO does not work multiple times and not for longer routes -> how is memory management done?
+    // for(int i = 0; i < 10; i++) {
         run_main(7, (char **) args);
-    }
+    // }
 
     return 0;
 }

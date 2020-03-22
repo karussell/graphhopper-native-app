@@ -26,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
-        tv.setText("Distance from GraphHopper Native: " + fromNative());
+        fromNative();
+        tv.setText("Calculated distance from GraphHopper Native. See logs.");
     }
 
     /**
