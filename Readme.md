@@ -1,5 +1,18 @@
 # Native GraphHopper
 
+Calculate offline routes and distances with GraphHopper on the Android
+device using a native image of GraphHopper instead of the jar dependency.
+
+The complexity is high and its disadvantage. There are the following
+advantages once this works:
+
+ * no strange per-process virtual memory limit
+ * GraphHopper does not need to limit itself to Java 7
+ * this process works with Gluon and JavaFX
+ * same process could work for iOS
+ * public transit could work too
+ * data import of raw OSM files (especially for small areas) could work too (i.e. on-demand areas and routes could be possible)
+
 ## Get Started
 
 ### Build the Graph Files
