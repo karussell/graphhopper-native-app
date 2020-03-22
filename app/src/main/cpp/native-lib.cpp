@@ -14,16 +14,16 @@ extern "C" {
 }
 
 int start_logger(const char *app_name);
+
 static int pfd[2];
 static pthread_t thr;
 static const char *tag = "myapp";
 
 // for graphhopper logs we need this and the start_logger since android eats fprintf
-static void *thread_func(void * arg) {
+static void *thread_func(void *arg) {
     ssize_t rdsz;
     char buf[128];
-    while ((rdsz = read(pfd[0], buf, sizeof buf - 1)) > 0)
-    {
+    while ((rdsz = read(pfd[0], buf, sizeof buf - 1)) > 0) {
         if (buf[rdsz - 1] == '\n')
             --rdsz;
         buf[rdsz] = 0; /* add null-terminator */
@@ -51,7 +51,7 @@ int start_logger(const char *app_name) {
     return 0;
 }
 
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void* reserved) {
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     start_logger("GraphHopper");
     return JNI_VERSION_1_4;
 }
@@ -59,8 +59,23 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void* reserved) {
 extern "C" JNIEXPORT jdouble JNICALL Java_com_graphhopper_myapplication_MainActivity_fromNative
         (JNIEnv *env, jobject activity) {
     LOGE(stderr, "Call GraphHopper");
-    // /mnt/sdcard/Download/graphhopper/maps/europe_germany_berlin-gh/
-    const char *args[] = {"myapp", "rungh", "/data/local/tmp/europe_germany_berlin-gh/", "10.", "11.", "12.03", "3.1415"};
-    double res = run_main(6, (char **) args);
-    return res;
+
+    // Berlin (0.04s)
+    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "52.5169", "13.3884", "52.5147", "13.3883"};
+    // Dresden -> Berlin (1s)
+    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "51.131108", "13.721924", "52.5147", "13.3883"};
+    // Hof -> Berlin (2s)
+    const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "50.190968", "11.678467", "52.5147", "13.3883"};
+    // Nürnberg -> Berlin (4s) also crashes sometimes
+    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "49.368066", "11.217041", "52.5147", "13.3883"};
+    // Munich -> Berlin ... crashes probably because of too much memory but even largeHeap does not help :(
+    // A/libc: Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x75150ff038 in tid 25991 (r.myapplication), pid 25991 (r.myapplication)
+    // https://stackoverflow.com/q/17840521/194609
+    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "48.118463", "11.539282", "52.5147", "13.3883"};
+
+    for(int i = 0; i < 10; i++) {
+        run_main(7, (char **) args);
+    }
+
+    return 0;
 }

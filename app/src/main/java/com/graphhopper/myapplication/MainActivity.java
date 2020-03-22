@@ -1,7 +1,9 @@
 package com.graphhopper.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -18,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        int CONSTANT = 2;
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CONSTANT);
 
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
