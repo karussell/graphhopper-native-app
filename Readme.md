@@ -27,6 +27,7 @@ See also TODOs.
 ### Build the Graph Files
 
  * Get the repository https://github.com/karussell/graphhopper-native-image/
+   and switch to branch clientplugin
  * mvn clean install
  * download a pbf file from OSM e.g. `wget http://download.geofabrik.de/europe/germany/berlin-latest.osm.pbf`
  * `ln -s berlin-latest.osm.pbf osm.pbf`
