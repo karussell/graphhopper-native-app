@@ -4,20 +4,14 @@
 # Sets the minimum version of CMake required to build the native library.
 
 cmake_minimum_required(VERSION 3.4.1)
+set(distribution_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../../distribution)
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
 
-add_library( # Sets the name of the library.
-             native-lib
-
-             # Sets the library as a shared library.
-             SHARED
-
-             # Provides a relative path to your source file(s).
-             native-lib.cpp )
+add_library( native-lib SHARED native-lib.cpp )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -25,25 +19,19 @@ add_library( # Sets the name of the library.
 # you want to add. CMake verifies that the library exists before
 # completing its build.
 
-find_library( # Sets the name of the path variable.
-              log-lib
-
-              # Specifies the name of the NDK library that
-              # you want CMake to locate.
-              log )
+find_library( log-lib log )
 
 # https://developer.android.com/studio/projects/configure-cmake
-add_library( imported-lib SHARED IMPORTED )
+# https://github.com/android/ndk-samples/issues/669
 
-set_target_properties( imported-lib PROPERTIES IMPORTED_LOCATION
-              /home/peter/Documents/quell/examples/android-studio-native/app/libs/libmyniexample.so )
-
-# include_directories( /home/peter/Documents/quell/examples/android-studio-native/app/libs/include )
+# TODO this does not work because the library has absolute paths inside? See similar issue https://github.com/android/ndk-samples/issues/669
+# add_library( imported-lib SHARED IMPORTED )
+# set_target_properties( imported-lib PROPERTIES IMPORTED_LOCATION ${distribution_DIR}/ghlib/${ANDROID_ABI}/libmyniexample.so )
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
 
 target_link_libraries( native-lib
-                       imported-lib
-                       ${log-lib} )
+                       ${log-lib}
+                       -lmyniexample -L${distribution_DIR}/ghlib/${ANDROID_ABI}/ )
