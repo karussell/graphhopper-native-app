@@ -61,11 +61,11 @@ extern "C" JNIEXPORT jdouble JNICALL Java_com_graphhopper_myapplication_MainActi
     LOGE(stderr, "Call GraphHopper");
 
     // Berlin (0.04s)
-    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "52.5169", "13.3884", "52.5147", "13.3883"};
+    const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "52.5169", "13.3884", "52.5147", "13.3883"};
     // Dresden -> Berlin (1s)
     // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "51.131108", "13.721924", "52.5147", "13.3883"};
     // Hof -> Berlin (2s)
-    const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "50.190968", "11.678467", "52.5147", "13.3883"};
+    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "50.190968", "11.678467", "52.5147", "13.3883"};
     // Nürnberg -> Berlin (4s) also crashes sometimes
     // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "49.368066", "11.217041", "52.5147", "13.3883"};
     // Munich -> Berlin ... crashes probably because of too much memory but even largeHeap does not help :(
