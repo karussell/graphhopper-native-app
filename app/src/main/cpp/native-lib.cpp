@@ -5,12 +5,11 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#define  LOG_TAG "GluonNative"
-#define  LOGE(ignore, ...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
+#define  LOGE(ignore, ...)  __android_log_print(ANDROID_LOG_ERROR, "graphhopper", __VA_ARGS__)
 
 
 extern "C" {
-int (*run_main)(int paramArgc, char** paramArgv);
+    int run_main(int paramArgc, char** paramArgv);
 // original was: int *run_main(int paramArgc, char** paramArgv);
 }
 
@@ -64,11 +63,9 @@ int callGraal() {
     LOGE(stderr, "We should start runGH now");
     fprintf(stderr, "We should start runGH now from FPRINTF");
 
-    // LOGE(stderr, "Calling rungh at %p, thread at %p\n", runGH, thread);
-    // const char *args[] = {"myapp"};
     const char *args[] = {"myapp", "rungh", "10.", "11.", "12.03", "3.1415"};
-    (*run_main)(6, (char **) args);
-    // double* distance = (*runGH)(thread, lat1, lon1, lat2, lon2);
+    run_main(6, (char **) args);
+
     LOGE(stderr, "We DID start runGH now");
     return 12;
 }
@@ -77,12 +74,6 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void* reserved) {
     fprintf(stderr, "[GDBG] JNI Onload for nativelib\n");
     start_logger("GraalCompiled");
     LOGE(stderr, "[GDBG] JNI Onload for nativelib\n");
-    return JNI_VERSION_1_4;
-}
-
-JNIEXPORT jint JNICALL JNI_OnLoad_nativelib(JavaVM *vm, void* reserved) {
-    fprintf(stderr, "[GDBG] Onload for nativelib\n");
-    LOGE(stderr, "[GDBG] Onload for nativelib\n");
     return JNI_VERSION_1_4;
 }
 
