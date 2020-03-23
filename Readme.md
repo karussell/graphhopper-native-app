@@ -44,7 +44,7 @@ of this repository here.
 ## TODOs
 
  * Communication with library is unclear. Currently we can only send
-   coordinates to it but cannot receive something (we can only read log messages)
+   coordinates to it but cannot receive something (we can only read log messages). Maybe we start dropwizard on Android and communicate via the normal http client :) ?
  * What other targets besides arm64-v8a can we support?
  * Can we avoid app crashes when doing multiple route calculations (how is memory management done?)
  * There are app crashes when doing longer routes (memory problems)
