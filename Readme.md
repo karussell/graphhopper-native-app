@@ -27,7 +27,7 @@ See also TODOs.
 ### Build the Graph Files
 
  * Get the repository https://github.com/karussell/graphhopper-native-image/
-   and switch to branch clientplugin
+ * cd android
  * mvn clean install
  * download a pbf file from OSM e.g. `wget http://download.geofabrik.de/europe/germany/berlin-latest.osm.pbf`
  * `ln -s berlin-latest.osm.pbf osm.pbf`
@@ -36,7 +36,7 @@ See also TODOs.
 
 ### Get the GraphHopper Native Library
 
-Follow instructions in https://github.com/karussell/graphhopper-native-image/pull/2
+Follow instructions in https://github.com/karussell/graphhopper-native-image/#build-android
 
 Copy the created `libgraphhoppernative.so` into `distribution/ghlib/arm64-v8a/`
 of this repository here.
