@@ -4,13 +4,16 @@
 #include <errno.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 
 #define  LOGE(ignore, ...)  __android_log_print(ANDROID_LOG_ERROR, "graphhopper", __VA_ARGS__)
 
 extern "C" {
-    // this interface is from GraalVM
-    // https://github.com/oracle/graal/blob/master/substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/image/AbstractBootImage.java#L81
-    int run_main(int paramArgc, char** paramArgv);
+// this interface is from GraalVM
+// https://github.com/oracle/graal/blob/master/substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/image/AbstractBootImage.java#L81
+int run_main(int paramArgc, char **paramArgv);
 }
 
 int start_logger(const char *app_name);
@@ -56,27 +59,34 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     return JNI_VERSION_1_4;
 }
 
-extern "C" JNIEXPORT jdouble JNICALL Java_com_graphhopper_myapplication_MainActivity_fromNative
-        (JNIEnv *env, jobject activity) {
+extern "C" JNIEXPORT jstring JNICALL Java_com_graphhopper_myapplication_MainActivity_fromNative
+        (JNIEnv *env, jobject activity, jstring jExchangeFileName) {
     LOGE(stderr, "Call GraphHopper");
 
+    const char *exchange_file_name = env->GetStringUTFChars(jExchangeFileName, 0);
     // Berlin (0.04s)
-    const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "52.5169", "13.3884", "52.5147", "13.3883"};
+    const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", exchange_file_name,
+                          "52.5169", "13.3884", "52.5147", "13.3883"};
     // Dresden -> Berlin (1s)
-    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "51.131108", "13.721924", "52.5147", "13.3883"};
+    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", exchange_file_name, "51.131108", "13.721924", "52.5147", "13.3883"};
     // Hof -> Berlin (2s)
-    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "50.190968", "11.678467", "52.5147", "13.3883"};
+    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", exchange_file_name, "50.190968", "11.678467", "52.5147", "13.3883"};
     // Nürnberg -> Berlin (4s) also crashes sometimes
-    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "49.368066", "11.217041", "52.5147", "13.3883"};
+    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", exchange_file_name, "49.368066", "11.217041", "52.5147", "13.3883"};
     // Munich -> Berlin ... crashes probably because of too much memory but even largeHeap does not help :(
     // A/libc: Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x75150ff038 in tid 25991 (r.myapplication), pid 25991 (r.myapplication)
     // https://stackoverflow.com/q/17840521/194609
-    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", "48.118463", "11.539282", "52.5147", "13.3883"};
+    // const char *args[] = {"myapp", "rungh", "/data/local/tmp/graph-cache/", exchange_file_name, "48.118463", "11.539282", "52.5147", "13.3883"};
 
     // TODO does not work multiple times and not for longer routes -> how is memory management done?
-    // for(int i = 0; i < 10; i++) {
-        run_main(7, (char **) args);
-    // }
+    run_main(8, (char **) args);
 
-    return 0;
+    // uh, is this ugliness really necessary?
+    env->ReleaseStringUTFChars(jExchangeFileName, exchange_file_name);
+
+    // now read created json
+    std::ifstream ifs(exchange_file_name);
+    std::string fileContent((std::istreambuf_iterator<char>(ifs)),
+                            (std::istreambuf_iterator<char>()));
+    return env->NewStringUTF(fileContent.c_str());
 }
